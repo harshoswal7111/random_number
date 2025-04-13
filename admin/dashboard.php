@@ -116,7 +116,7 @@ if (!empty($admin_next)) {
                     </div>
                 </div>
                 <div class="text-center mt-4 text-muted small">
-                    &copy; <?php echo date('Y'); ?> Random Number Generator
+                    &copy; <?php echo date('Y'); ?> SPL 5
                 </div>
             </div>
         </div>

@@ -5,23 +5,32 @@ require_once __DIR__ . '/inc/session.php';
 if (!isset($_SESSION['generated_numbers'])) {
     $_SESSION['generated_numbers'] = [];
 }
-
 // Handle new number generation
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['generate'])) {
-    // Check for admin override sequence
-    if (!empty($_SESSION['admin_next_numbers']) && is_array($_SESSION['admin_next_numbers'])) {
-        $next = array_shift($_SESSION['admin_next_numbers']);
-        $number = intval($next);
-    } else {
-        $number = rand(1, 200);
-    }
-    $_SESSION['generated_numbers'][] = $number;
-    // Save updated admin sequence
-    if (empty($_SESSION['admin_next_numbers'])) {
-        unset($_SESSION['admin_next_numbers']);
-    }
-    header('Location: index.php');
-    exit;
+   // Check for admin override sequence
+   if (!empty($_SESSION['admin_next_numbers']) && is_array($_SESSION['admin_next_numbers'])) {
+       $next = array_shift($_SESSION['admin_next_numbers']);
+       $number = intval($next);
+   } else {
+       $number = rand(1, 200);
+   }
+   $_SESSION['generated_numbers'][] = $number;
+   // Save updated admin sequence
+   if (empty($_SESSION['admin_next_numbers'])) {
+       unset($_SESSION['admin_next_numbers']);
+   }
+   header('Location: index.php');
+   exit;
+}
+
+// Handle reset lottery
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['reset_lottery'])) {
+   $_SESSION['generated_numbers'] = [];
+   // Optionally, also reset admin override sequence:
+   // unset($_SESSION['admin_next_numbers']);
+   header('Location: index.php');
+   exit;
+}
 }
 
 // For display: get generated numbers
@@ -75,9 +84,12 @@ if (!empty($_SESSION['admin_next_numbers']) && is_array($_SESSION['admin_next_nu
             <div class="col-lg-6 col-md-8">
                 <div class="card p-4">
                     <h1 class="mb-4 text-center text-primary">Random Number Generator</h1>
-                    <form method="post" class="text-center mb-4">
+                    <form method="post" class="text-center mb-4 d-flex flex-column flex-md-row justify-content-center gap-2">
                         <button type="submit" name="generate" class="btn btn-lg btn-success shadow-sm">
                             Generate New Number
+                        </button>
+                        <button type="submit" name="reset_lottery" class="btn btn-lg btn-danger shadow-sm" onclick="return confirm('Are you sure you want to reset the lottery? This will clear all generated numbers for this session.');">
+                            Reset Lottery
                         </button>
                     </form>
                     <h4 class="mb-2">Generated Numbers (this session):</h4>
@@ -90,18 +102,12 @@ if (!empty($_SESSION['admin_next_numbers']) && is_array($_SESSION['admin_next_nu
                             <?php endforeach; ?>
                         <?php endif; ?>
                     </div>
-                    <h5 class="mb-2">Next 5 Numbers (preview):</h5>
-                    <div>
-                        <?php foreach ($next_numbers as $num): ?>
-                            <span class="number-badge next-badge"><?php echo htmlspecialchars($num); ?></span>
-                        <?php endforeach; ?>
-                    </div>
                     <div class="mt-4 text-center">
                         <a href="admin/login.php" class="btn btn-outline-primary btn-sm">Admin Login</a>
                     </div>
                 </div>
                 <div class="text-center mt-4 text-muted small">
-                    &copy; <?php echo date('Y'); ?> Random Number Generator &mdash; Powered by PHP &amp; Bootstrap 5
+                    &copy; <?php echo date('Y'); ?> SPL 5 &mdash; Powered by PHP &amp; Bootstrap 5
                 </div>
             </div>
         </div>
