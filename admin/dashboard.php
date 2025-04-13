@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__ . '/../inc/session.php';
 require_once __DIR__ . '/../inc/state.php';
 
 // Redirect to login if not admin

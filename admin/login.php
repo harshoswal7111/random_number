@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/../inc/session.php';
+require_once __DIR__ . '/../inc/state.php';
 
 $error = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
