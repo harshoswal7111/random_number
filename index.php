@@ -1,43 +1,39 @@
 <?php
-require_once __DIR__ . '/inc/session.php';
+require_once __DIR__ . '/inc/state.php';
 
-// Initialize generated numbers array in session if not set
-if (!isset($_SESSION['generated_numbers'])) {
-    $_SESSION['generated_numbers'] = [];
-}
+// No session-based initialization needed; state is global
 // Handle new number generation
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['generate'])) {
-   // Check for admin override sequence
-   if (!empty($_SESSION['admin_next_numbers']) && is_array($_SESSION['admin_next_numbers'])) {
-       $next = array_shift($_SESSION['admin_next_numbers']);
-       if (strtoupper($next) === 'R') {
-           $number = rand(1, 200);
-       } else {
-           $number = intval($next);
-       }
-   } else {
-       $number = rand(1, 200);
-   }
-   $_SESSION['generated_numbers'][] = $number;
-   // Save updated admin sequence
-   if (empty($_SESSION['admin_next_numbers'])) {
-       unset($_SESSION['admin_next_numbers']);
-   }
-   header('Location: index.php');
-   exit;
+    $admin_next_numbers = get_admin_next_numbers();
+    if (!empty($admin_next_numbers) && is_array($admin_next_numbers)) {
+        $next = array_shift($admin_next_numbers);
+        if (strtoupper($next) === 'R') {
+            $number = rand(1, 200);
+        } else {
+            $number = intval($next);
+        }
+        set_admin_next_numbers($admin_next_numbers); // Save updated override sequence
+    } else {
+        $number = rand(1, 200);
+    }
+    $generated_numbers = get_generated_numbers();
+    $generated_numbers[] = $number;
+    set_generated_numbers($generated_numbers);
+    header('Location: index.php');
+    exit;
 }
 
 // Handle reset lottery
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['reset_lottery'])) {
-   $_SESSION['generated_numbers'] = [];
-   // Optionally, also reset admin override sequence:
-   // unset($_SESSION['admin_next_numbers']);
-   header('Location: index.php');
-   exit;
+    set_generated_numbers([]);
+    // Optionally, also reset admin override sequence:
+    // set_admin_next_numbers([]);
+    header('Location: index.php');
+    exit;
 }
 
 // For display: get generated numbers
-$generated_numbers = $_SESSION['generated_numbers'];
+$generated_numbers = get_generated_numbers();
 
 if (!empty($_SESSION['admin_next_numbers']) && is_array($_SESSION['admin_next_numbers'])) {
     $next_numbers = array_slice($_SESSION['admin_next_numbers'], 0, 5);
