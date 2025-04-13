@@ -31,13 +31,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['reset_lottery'])) {
    header('Location: index.php');
    exit;
 }
-}
 
 // For display: get generated numbers
 $generated_numbers = $_SESSION['generated_numbers'];
 
-// For display: predict next 5 numbers (if no admin override)
-$next_numbers = [];
 if (!empty($_SESSION['admin_next_numbers']) && is_array($_SESSION['admin_next_numbers'])) {
     $next_numbers = array_slice($_SESSION['admin_next_numbers'], 0, 5);
 } else {
