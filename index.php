@@ -10,7 +10,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['generate'])) {
    // Check for admin override sequence
    if (!empty($_SESSION['admin_next_numbers']) && is_array($_SESSION['admin_next_numbers'])) {
        $next = array_shift($_SESSION['admin_next_numbers']);
-       $number = intval($next);
+       if (strtoupper($next) === 'R') {
+           $number = rand(1, 200);
+       } else {
+           $number = intval($next);
+       }
    } else {
        $number = rand(1, 200);
    }

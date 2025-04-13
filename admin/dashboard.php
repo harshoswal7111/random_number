@@ -15,11 +15,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_next'])) {
     $inputs = [];
     for ($i = 0; $i < 5; $i++) {
         $val = isset($_POST['next'][$i]) ? trim($_POST['next'][$i]) : '';
-        if ($val === '' || !is_numeric($val) || intval($val) < 1 || intval($val) > 200) {
-            $error = 'All next numbers must be integers between 1 and 200.';
+        if ($val === '') {
+            $error = 'All next numbers must be filled (number 1-200 or R).';
             break;
         }
-        $inputs[] = intval($val);
+        if (strtoupper($val) === 'R') {
+            $inputs[] = 'R';
+        } elseif (is_numeric($val) && intval($val) >= 1 && intval($val) <= 200) {
+            $inputs[] = intval($val);
+        } else {
+            $error = 'Each next number must be an integer between 1 and 200, or "R" for random.';
+            break;
+        }
     }
     if (!$error) {
         set_admin_next_numbers($inputs);
@@ -101,7 +108,7 @@ if (!empty($admin_next)) {
                     <form method="post" class="row g-2 align-items-end mb-3">
                         <?php for ($i = 0; $i < 5; $i++): ?>
                             <div class="col-6 col-md-2">
-                                <input type="number" min="1" max="200" class="form-control next-input" name="next[]" value="<?php echo htmlspecialchars($next_numbers[$i]); ?>" required>
+                                <input type="text" class="form-control next-input" name="next[]" value="<?php echo htmlspecialchars($next_numbers[$i]); ?>" required pattern="^([Rr]|[1-9][0-9]{0,2}|1[0-9]{2}|200)$" title='Enter 1-200 or "R" for random' placeholder='1-200 or R'>
                             </div>
                         <?php endfor; ?>
                         <div class="col-12 col-md-2">
@@ -109,7 +116,7 @@ if (!empty($admin_next)) {
                         </div>
                     </form>
                     <div class="alert alert-info small">
-                        Editing the next numbers will override the random generation for the next 5 numbers.
+                        Enter a number (1-200) or "R" for random. Editing the next numbers will override the random generation for the next 5 numbers.
                     </div>
                     <div class="mt-4 text-center">
                         <a href="../index.php" class="btn btn-outline-primary btn-sm">Back to Public Page</a>
