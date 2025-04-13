@@ -18,23 +18,4 @@ function admin_login() {
 function admin_logout() {
     unset($_SESSION['admin_logged_in']);
 }
-
-// Helper: Get generated numbers
-function get_generated_numbers() {
-    return isset($_SESSION['generated_numbers']) ? $_SESSION['generated_numbers'] : [];
-}
-
-// Helper: Set generated numbers
-function set_generated_numbers($numbers) {
-    $_SESSION['generated_numbers'] = $numbers;
-}
-
-// Helper: Get admin override sequence
-function get_admin_next_numbers() {
-    return isset($_SESSION['admin_next_numbers']) ? $_SESSION['admin_next_numbers'] : [];
-}
-
-// Helper: Set admin override sequence
-function set_admin_next_numbers($numbers) {
-    $_SESSION['admin_next_numbers'] = $numbers;
 }
