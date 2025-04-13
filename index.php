@@ -103,9 +103,6 @@ if (!empty($_SESSION['admin_next_numbers']) && is_array($_SESSION['admin_next_nu
                             <?php endforeach; ?>
                         <?php endif; ?>
                     </div>
-                    <div class="mt-4 text-center">
-                        <a href="admin/login.php" class="btn btn-outline-primary btn-sm">Admin Login</a>
-                    </div>
                 </div>
                 <div class="text-center mt-4 text-muted small">
                     &copy; <?php echo date('Y'); ?> SPL 5 &mdash; Powered by PHP &amp; Bootstrap 5
