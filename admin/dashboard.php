@@ -95,7 +95,7 @@ if (!empty($admin_next)) {
                     <?php if ($error): ?>
                         <div class="alert alert-danger"><?php echo htmlspecialchars($error); ?></div>
                     <?php endif; ?>
-                    <h5 class="mb-2">Generated Numbers (this session):</h5>
+                    <h5 class="mb-2">Generated Numbers:</h5>
                     <div class="mb-3">
                         <?php if (empty($generated_numbers)): ?>
                             <span class="text-muted">No numbers generated yet.</span>

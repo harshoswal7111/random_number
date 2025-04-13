@@ -18,4 +18,3 @@ function admin_login() {
 function admin_logout() {
     unset($_SESSION['admin_logged_in']);
 }
-}

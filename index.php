@@ -35,14 +35,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['reset_lottery'])) {
 // For display: get generated numbers
 $generated_numbers = get_generated_numbers();
 
-if (!empty($_SESSION['admin_next_numbers']) && is_array($_SESSION['admin_next_numbers'])) {
-    $next_numbers = array_slice($_SESSION['admin_next_numbers'], 0, 5);
-} else {
-    // Predict next 5 random numbers (not truly predictable, just placeholders)
-    for ($i = 0; $i < 5; $i++) {
-        $next_numbers[] = rand(1, 200);
-    }
-}
 ?>
 <!DOCTYPE html>
 <html lang="en">
